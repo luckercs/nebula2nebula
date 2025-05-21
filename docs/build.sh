@@ -18,20 +18,12 @@ else
     exit 1
 fi
 
-if command -v docker > /dev/null 2>&1
-then
-    echo "check docker ok"
-else
-  echo "docker not found, please install it first"
-  exit 1
-fi
-
 script_dir=$(dirname "$0")
 cd "$script_dir"
 project_dir=$(dirname "$(pwd)")
 
 echo "build ..."
-cd $project_dir/server-fe
+cd $project_dir
 mvn clean package -Dmaven.test.skip=true
 
 echo "build successfully"

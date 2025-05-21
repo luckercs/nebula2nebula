@@ -4,26 +4,25 @@ nebulagraph 数据导入导出工具, 支持3.6.0、3.8.0等版本
 
 ## (1) Requirements
 - jdk8
-- spark-2.4.8-bin-hadoop2.7
-
-```shell
-# 需要spark2.4.8的环境
-export SPARK_HOME=$(pwd)/spark-2.4.8-bin-hadoop2.7
-mv spark-2.4.8-bin-hadoop2.7/conf/log4j.properties.template spark-2.4.8-bin-hadoop2.7/conf/log4j.properties
-```
 
 ## (2) Get Started
 
 ```shell
 
-# 导出所有schema，之后可以通过 nebula-console 工具或者 nebula-studio 的web页面导入schema语句执行
-spark-2.4.8-bin-hadoop2.7/bin/spark-submit --master local --class NebulaSchema nebula2nebula-1.0-jar-with-dependencies.jar --graphd <NEBULA_HOST>:9669 --user root --pass <NEBULA_PASS>
+# 导出schema, 生成schemas.ngql文件
+java -cp nebula2nebula-1.0.jar SchemaExport --graphd <NEBULA_HOST>:9669 --user root --pass <NEBULA_PASS>
 
-# nebula2csv, 将nebulagraph数据导出到本地csv文件
-spark-2.4.8-bin-hadoop2.7/bin/spark-submit --master local --class Nebula2Csv nebula2nebula-1.0-jar-with-dependencies.jar --graphd <NEBULA_HOST>:9669 --metad <NEBULA_HOST>:9559 --user root --pass <NEBULA_PASS> --csv nebula_dump --delimiter ","
+# 导入schema，导入当前路径下的schemas.ngql文件
+java -cp nebula2nebula-1.0.jar SchemaImport --graphd <NEBULA_HOST>:9669 --user root --pass <NEBULA_PASS>
 
-# csv2nebula, 将本地csv文件导入到指定nebulagraph中
-spark-2.4.8-bin-hadoop2.7/bin/spark-submit --master local --class Csv2Nebula nebula2nebula-1.0-jar-with-dependencies.jar --graphd <NEBULA_HOST>:9669 --metad <NEBULA_HOST>:9559 --user root --pass <NEBULA_PASS> --csv nebula_dump --delimiter ","
+# nebula2csv
+java -cp nebula2nebula-1.0.jar Nebula2Csv --graphd <NEBULA_HOST>:9669 --metad <NEBULA_HOST>:9559 --user root --pass <NEBULA_PASS> --csv nebula_dump --delimiter ","
+
+# csv2nebula
+java -cp nebula2nebula-1.0.jar Csv2Nebula --graphd <NEBULA_HOST>:9669 --metad <NEBULA_HOST>:9559 --user root --pass <NEBULA_PASS> --csv nebula_dump --delimiter ","
+
+# nebula2nebula
+java -cp nebula2nebula-1.0.jar Nebula2Nebula --graphd <NEBULA_HOST>:9669 --metad <NEBULA_HOST>:9559 --user root --pass <NEBULA_PASS> --t_metad <TARGET_NEBULA_HOST>:9559 --t_graphd <TARGET_NEBULA_HOST>:9669 --t_user root --t_pass <TARGET_NEBULA_PASS>
 
 ```
 ## (3) Thanks

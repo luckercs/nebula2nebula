@@ -17,6 +17,7 @@ object Nebula2Csv {
     val sparkConf = new SparkConf
     sparkConf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
       .registerKryoClasses(Array[Class[_]](classOf[TCompactProtocol]))
+    sparkConf.set("fs.file.impl", "org.apache.hadoop.fs.LocalFileSystem")
     val spark = SparkSession.builder
       .appName("Nebula2Csv")
       .master("local[*]")
